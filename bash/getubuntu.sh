@@ -25,9 +25,10 @@ while [[ $VERSION = "" ]]; do
               echo -e "\nInvalid choice! Please enter a number from 1 to ${#vnrarr[@]}"
          else
               ARRVNR=$(( REPLY - 1 ))
-              echo -e "\nFile selected: ${urlarr[$ARRVNR]}"
+              TARGET=$urlarr[$ARRVNR]
+              echo -e "\nFile selected: $TARGET"
               echo -e "\nInitiating download...\n"
-              wget ${urlarr[$ARRVNR]} -q --show-progress --progress=bar:force 2>&1
+              wget $TARGET -q --show-progress --progress=bar:force 2>&1
               echo -e "\nDone! Thank you for using my script.\n"
          fi
          break
