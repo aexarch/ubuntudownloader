@@ -3,9 +3,9 @@ echo -e "Ubuntu ISO Downloader for Desktop x64 architectures\n"
 echo -e "This script requires an active internet connection and superuser permissions.\nPlease ensure that you have access to both before proceeding."
 cat < /dev/null > /dev/tcp/8.8.8.8/53; ONLINE=$( echo $? )
 if [ $ONLINE -eq 0 ]; then
-    echo -e "The network connection is up. Proceeding...\n"
+    echo -e "\nThe network connection is up. Proceeding...\n"
 else
-  echo -e "The network connection is down.\nPlease connect to the internet and try again."
+  echo -e "\nThe network connection is down.\nPlease connect to the internet and try again."
   exit
 fi
 echo -e "\nIn order for this bash script to work you first need to install the wget package for your distro, if not present.\nThis will require superuser permissions.\nAn apt-update will be necessary too, beforehand."
