@@ -24,9 +24,12 @@ while [[ $VERSION = "" ]]; do
          if [[ $VERSION = "" ]]; then
               echo -e "\nInvalid choice! Please enter a number from 1 to " ${#vnrarr[@]}
          else
-              echo -e "So far so good!\nTODO: Add code for the download...\n"
+              echo -e "So far so good!\n"
               ARRVNR=$(( REPLY - 1 ))
-              echo -e "\nFile selected is " ${urlarr[$ARRVNR]}
+              echo -e "\nFile selected: ${urlarr[$ARRVNR]}"
+              echo -e "\nInitiating download...\n"
+              wget ${urlarr[$ARRVNR]} -q --show-progress --progress=bar:force 2>&1
+              echo -e "\nDone! Thank you for using my script."
          fi
          break
      done
