@@ -33,7 +33,7 @@ while [[ $VERSION = "" ]]; do
          break
      done
 done
-echo "Tidying up and exiting script.”
+echo "Tidying up and exiting script."
 rm -rf releases.ubuntu.com
 rm urls.txt
 rm vnrs.txt
