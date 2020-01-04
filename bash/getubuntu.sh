@@ -22,19 +22,19 @@ while [[ $VERSION = "" ]]; do
     echo -e "\nPlease enter the number corresponding to the Ubuntu version you want to download.\n"
     select VERSION in "${vnrarr[@]}"; do
          if [[ $VERSION = "" ]]; then
-              echo -e "\nInvalid choice! Please enter a number from 1 to " ${#vnrarr[@]}
+              echo -e "\nInvalid choice! Please enter a number from 1 to ${#vnrarr[@]}"
          else
-              echo -e "So far so good!\n"
               ARRVNR=$(( REPLY - 1 ))
               echo -e "\nFile selected: ${urlarr[$ARRVNR]}"
               echo -e "\nInitiating download...\n"
               wget ${urlarr[$ARRVNR]} -q --show-progress --progress=bar:force 2>&1
-              echo -e "\nDone! Thank you for using my script."
+              echo -e "\nDone! Thank you for using my script.\n"
          fi
          break
      done
 done
+echo "Tidying up and exiting script.”
+rm -rf releases.ubuntu.com
 rm urls.txt
 rm vnrs.txt
-rm -rf releases.ubuntu.com
 exit 0
