@@ -8,7 +8,7 @@ else
   echo -e "\nThe network connection is down.\nPlease connect to the internet and try again."
   exit
 fi
-echo -e "\nIn order for this bash script to work you first need to install the wget package for your distro, if not present.\nThis will require superuser permissions.\nA APT package list update will be necessary too, beforehand."
+echo -e "\nIn order for this bash script to work you first need to install the wget package for your distro, if not present.\nThis will require superuser permissions.\nAn APT package list update will be necessary too, beforehand."
 echo -e "\nAttempting to update package lists and install the prerequisites through APT...\nPlease provide superuser permissions."
 sudo apt-get update
 sudo apt-get install wget
