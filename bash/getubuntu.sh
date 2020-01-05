@@ -9,9 +9,17 @@ else
   exit
 fi
 echo -e "\nIn order for this bash script to work you first need to install the wget package for your distro, if not present.\nThis will require superuser permissions.\nAn APT package list update will be necessary too, beforehand."
-echo -e "\nAttempting to update package lists and install the prerequisites through APT...\nPlease provide superuser permissions."
-sudo apt-get update
-sudo apt-get install wget
+echo -e "\nAttempting to update package lists and install the prerequisites through APT...\nPlease provide superuser permissions if needed.\n"
+if [[ ! -z $(which apt-get) ]] && [[ -z $(which wget) ]]; then
+    echo -e "\nwget package is not installed. Please provide superuser permissions to install it now.\n"
+    sudo apt-get update
+    sudo apt-get install wget
+else
+    if [[ -z $(which wget) ]]; then
+        echo -e "Unable to retrieve missing package wget through APT.\nYou'll have to manually install it and rerun this script."
+        exit
+    fi
+fi
 echo -e "\nFetching download URLs for available Ubuntu versions and building menu. Please wait..."
 wget -r --spider -l0 -A iso ftp://releases.ubuntu.com/releases/.pool/ 2>&1 | grep -Eo '(ftp)://[^/"].+\-desktop\-amd64\.iso' | sort -u > urls.txt
 readarray urlarr < urls.txt
@@ -19,22 +27,22 @@ cat urls.txt | awk -F"-" '{ print $2 }' > vnrs.txt
 readarray vnrarr < vnrs.txt
 VERSION=""
 while [[ $VERSION = "" ]]; do
-    echo -e "\nPlease enter the number corresponding to the Ubuntu version you want to download.\n"
+    echo -e "\nPlease enter the choice number corresponding to the Ubuntu version you want to download.\n"
     select VERSION in "${vnrarr[@]}"; do
          if [[ $VERSION = "" ]]; then
-              echo -e "\nInvalid choice! Please enter a number from 1 to ${#vnrarr[@]}"
+              echo -e "\nInvalid choice! Please enter a number from 1 to ${#vnrarr[@]}.\n"
          else
               ARRVNR=$(( REPLY - 1 ))
               TARGET=$urlarr[$ARRVNR]
               echo -e "\nFile selected: $TARGET"
               echo -e "\nInitiating download...\n"
-              wget $TARGET -q --show-progress --progress=bar:force 2>&1
+              wget $TARGET -q -d -c --tries=0 --read-timeout=30 --show-progress --progress=bar:force 2>&1
               echo -e "\nDone! Thank you for using my script.\n"
          fi
          break
      done
 done
-echo "Tidying up and exiting script."
+echo "\nTidying up and exiting script."
 rm -rf releases.ubuntu.com
 rm urls.txt
 rm vnrs.txt
