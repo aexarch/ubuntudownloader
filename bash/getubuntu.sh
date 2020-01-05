@@ -26,6 +26,11 @@ if [[ -z $(which wget) ]]; then
         exit
     fi
 fi
+cleanup () {
+    rm -rf releases.ubuntu.com
+    rm urls.txt
+    rm vnrs.txt
+}
 echo -e "\nFetching download URLs for available Ubuntu versions and building menu. Please wait..."
 wget -r --spider -l0 -A iso ftp://releases.ubuntu.com/releases/.pool/ 2>&1 | grep -Eo '(ftp)://[^/"].+\-desktop\-amd64\.iso' | sort -u > urls.txt
 readarray urlarr < urls.txt
@@ -34,9 +39,7 @@ readarray vnrarr < vnrs.txt
 if [ ${#vnrarr[@]} -eq 0 ]; then
     echo -e "\nThe filelist returned seems to be empty.\nPlease check connectivity and retry later.\nIf this issue persists, please contact the developer of this script.\n"
     echo -e "Tidying up and exiting script."
-    rm -rf releases.ubuntu.com
-    rm urls.txt
-    rm vnrs.txt
+    cleanup
     exit
 fi
 VERSION=""
@@ -53,9 +56,7 @@ while [[ $VERSION = "" ]]; do
             echo -e "\n"
             if [[ ! $REPLY =~ ^[Yy]$ ]]; then
                 echo -e "\nUser aborted. Tidying up and exiting script."
-                rm -rf releases.ubuntu.com
-                rm urls.txt
-                rm vnrs.txt
+                cleanup
                 exit
             fi
             echo -e "\nInitiating download...\n"
@@ -66,7 +67,5 @@ while [[ $VERSION = "" ]]; do
     done
 done
 echo "Tidying up and exiting script."
-rm -rf releases.ubuntu.com
-rm urls.txt
-rm vnrs.txt
+cleanup
 exit 0
