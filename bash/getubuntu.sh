@@ -63,7 +63,7 @@ while [[ $VERSION = "" ]]; do
         if [[ $VERSION = "" ]]; then
             echo -e "\nInvalid choice! Please enter a number from 1 to ${#vnrarr[@]}.\n"
         else
-            ARRVNR=$(( REPLY - 1 )) #since array indexes start with zero we need to decrease the number by one
+            ARRVNR=$(( REPLY - 1 )) # Since array indexes start with zero we need to decrement the number by one
             TARGET=${urlarr[$ARRVNR]}
             echo -e "\nFile selected: $TARGET\n"
 
