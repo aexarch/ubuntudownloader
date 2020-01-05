@@ -10,13 +10,15 @@ else
 fi
 echo -e "\nIn order for this bash script to work you first need to install the wget package for your distro, if not present.\nThis will require superuser permissions.\nAn APT package list update will be necessary too, beforehand."
 echo -e "\nAttempting to update package lists and install the prerequisites through APT...\nPlease provide superuser permissions if needed.\n"
-if [[ ! -z $(which apt-get) ]] && [[ -z $(which wget) ]]; then
-    echo -e "\nwget package is not installed. Please provide superuser permissions to install it now.\n"
-    sudo apt-get update
-    sudo apt-get install wget
-else
-    if [[ -z $(which wget) ]]; then
-        echo -e "Unable to retrieve missing package wget through APT.\nYou'll have to manually install it and rerun this script."
+if [[ -z $(which wget) ]]; then
+    echo -e "\nwget package is not installed."
+    if [[ ! -z $(which apt-get) ]]; then
+        echo -e "Attempting to install via APT. Please provide superuser permissions.\n"
+        sudo apt-get update
+        sudo apt-get install wget
+        echo "\nDone. Proceeding...\n"
+    else
+        echo -e "\nUnable to retrieve missing package wget.\nYou'll have to manually install it and rerun this script."
         exit
     fi
 fi
