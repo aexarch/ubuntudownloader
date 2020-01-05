@@ -47,10 +47,10 @@ while [[ $VERSION = "" ]]; do
             echo -e "\nInvalid choice! Please enter a number from 1 to ${#vnrarr[@]}.\n"
         else
             ARRVNR=$(( REPLY - 1 ))
-            TARGET=$urlarr[$ARRVNR]
+            TARGET=${urlarr[$ARRVNR]}
             echo -e "\nFile selected: $TARGET\n"
-            read -p "Download the file? (Type Y to download or anything else to exit) " -n 1 -r
-            echo ""
+            read -p "Download the file? Type Y to download or anything else to exit. " -n 1 -r
+            echo -e "\n"
             if [[ ! $REPLY =~ ^[Yy]$ ]]; then
                 echo -e "\nUser aborted. Tidying up and exiting script."
                 rm -rf releases.ubuntu.com
