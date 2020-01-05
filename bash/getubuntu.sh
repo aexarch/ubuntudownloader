@@ -50,7 +50,7 @@ while [[ $VERSION = "" ]]; do
             TARGET=$urlarr[$ARRVNR]
             echo -e "\nFile selected: $TARGET\n"
             read -p "Download the file? (Type Y to download or anything else to exit) " -n 1 -r
-            echo #
+            echo ""
             if [[ ! $REPLY =~ ^[Yy]$ ]]; then
                 echo -e "\nUser aborted. Tidying up and exiting script."
                 rm -rf releases.ubuntu.com
@@ -59,7 +59,7 @@ while [[ $VERSION = "" ]]; do
                 exit
             fi
             echo -e "\nInitiating download...\n"
-            wget $TARGET -q -d -c --tries=0 --read-timeout=30 --show-progress --progress=bar:force 2>&1
+            wget $TARGET -c --quiet --tries=0 --read-timeout=30 --show-progress --progress=bar:force 2>&1
             echo -e "\nDone! Thank you for using my script.\n"
         fi
         break
