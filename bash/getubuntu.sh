@@ -8,7 +8,7 @@ else
   echo -e "\nThe network connection is down.\nPlease connect to the internet and try again."
   exit
 fi
-echo -e "\nIn order for this bash script to work you first need to install the wget package, if not present.\nThis will require superuser permissions.\nAn APT package list update will be necessary too."
+echo -e "\nIn order for this bash script to work you first need to install the wget package, if not present.\nThis will require superuser permissions."
 if [[ -z $(which wget) ]]; then
     echo -e "\nwget package is not installed."
     if [[ ! -z $(which apt-get) ]]; then
@@ -32,8 +32,8 @@ readarray urlarr < urls.txt
 cat urls.txt | awk -F"-" '{ print $2 }' > vnrs.txt
 readarray vnrarr < vnrs.txt
 if [ ${#vnrarr[@]} -eq 0 ]; then
-    echo -e "\nThe filelist returned seems to be empty. Please check connectivity and retry later.\nIf this issue persists, please contact the developer of this script.\n"
-    echo -e "Cleaning up and terminating script..."
+    echo -e "\nThe filelist returned seems to be empty.\nPlease check connectivity and retry later.\nIf this issue persists, please contact the developer of this script.\n"
+    echo -e "Tidying up and exiting script."
     rm -rf releases.ubuntu.com
     rm urls.txt
     rm vnrs.txt
