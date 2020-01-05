@@ -16,7 +16,7 @@ if [[ -z $(which wget) ]]; then
         sudo apt-get update
         sudo apt-get install wget
         if [ $? -eq 0 ]; then
-            echo "\nDone. Proceeding...\n"
+            echo -e "\nDone. Proceeding...\n"
         else
             echo -e "\nThere was an error while installing the missing wget package. apt-get exit code is: $?\nPlease install wget manually and rerun this script."
             exit
@@ -49,9 +49,10 @@ while [[ $VERSION = "" ]]; do
             ARRVNR=$(( REPLY - 1 ))
             TARGET=$urlarr[$ARRVNR]
             echo -e "\nFile selected: $TARGET\n"
-            read -p "Download the file? (Type Y to download or anything else to exit this script) " -n 1 -r
+            read -p "Download the file? (Type Y to download or anything else to exit) " -n 1 -r
+            echo #
             if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-                echo -e "User aborted. Tidying up and exiting script."
+                echo -e "\nUser aborted. Tidying up and exiting script."
                 rm -rf releases.ubuntu.com
                 rm urls.txt
                 rm vnrs.txt
