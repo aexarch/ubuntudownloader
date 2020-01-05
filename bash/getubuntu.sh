@@ -1,5 +1,7 @@
 #!/bin/bash
 echo -e "Ubuntu ISO Downloader for Desktop x64 architectures\n"
+
+#The following code segment checks for internet connectivity, then enters an if statement.
 echo -e "This bash script requires an active internet connection and may also require superuser permissions.\nPlease ensure that you have both before proceeding."
 cat < /dev/null > /dev/tcp/8.8.8.8/53; ONLINE=$( echo $? )
 if [ $ONLINE -eq 0 ]; then
@@ -8,6 +10,8 @@ else
   echo -e "\nThe network connection is down.\nPlease connect to the internet and try again."
   exit
 fi
+
+# The following code segment checks if the wget dependency is installed, and if apt-get command exists, downloads the missing command.
 echo -e "\nIn order for this bash script to work you first need to install the wget package, if not present.\nThis will require superuser permissions."
 if [[ -z $(which wget) ]]; then
     echo -e "\nwget package is not installed."
@@ -26,22 +30,32 @@ if [[ -z $(which wget) ]]; then
         exit
     fi
 fi
+
+# The following code segment is a function that deletes the script's temporary files when called.
 cleanup () {
     rm -rf releases.ubuntu.com
     rm urls.txt
     rm vnrs.txt
 }
+
+# The following code segment uses wget in spider mode, pipes its output to grep to be filtered for ftp urls using regex, then sort to only keep unique occurrences of urls, saves output in urls.txt, then reads the lines into an array
 echo -e "\nFetching download URLs for available Ubuntu versions and building menu. Please wait..."
 wget -r --spider -l0 -A iso ftp://releases.ubuntu.com/releases/.pool/ 2>&1 | grep -Eo '(ftp)://[^/"].+\-desktop\-amd64\.iso' | sort -u > urls.txt
 readarray urlarr < urls.txt
+
+# The following code segment pipes the cat output of urls.txt to awk to manipulate and only print the version numbers into a text file called vnrs.txt, then read into an array
 cat urls.txt | awk -F"-" '{ print $2 }' > vnrs.txt
 readarray vnrarr < vnrs.txt
+
+# The following code segment checks if the array is empty. If it is, it exits.
 if [ ${#vnrarr[@]} -eq 0 ]; then
     echo -e "\nThe filelist returned seems to be empty.\nPlease check connectivity and retry later.\nIf this issue persists, please contact the developer of this script.\n"
     echo -e "Tidying up and exiting script."
     cleanup
     exit
 fi
+
+# The following code segment generates a selection menu using version numbers as entries, matching the choice to the array of urls
 VERSION=""
 while [[ $VERSION = "" ]]; do
     echo -e "\nPlease enter the choice number corresponding to the Ubuntu version you want to download.\n"
@@ -49,9 +63,11 @@ while [[ $VERSION = "" ]]; do
         if [[ $VERSION = "" ]]; then
             echo -e "\nInvalid choice! Please enter a number from 1 to ${#vnrarr[@]}.\n"
         else
-            ARRVNR=$(( REPLY - 1 ))
+            ARRVNR=$(( REPLY - 1 )) #since array indexes start with zero we need to decrease the number by one
             TARGET=${urlarr[$ARRVNR]}
             echo -e "\nFile selected: $TARGET\n"
+
+# The following code segment adds option to abort by requesting confirmation before download
             read -p "Download the file? Type Y to download or anything else to exit. " -n 1 -r
             echo -e "\n"
             if [[ ! $REPLY =~ ^[Yy]$ ]]; then
@@ -59,6 +75,8 @@ while [[ $VERSION = "" ]]; do
                 cleanup
                 exit
             fi
+
+# The following code segment utilizes wget to download the file, in quiet mode, resumable and with infinite tries
             echo -e "\nInitiating download...\n"
             wget $TARGET -c --quiet --tries=0 --read-timeout=30 --show-progress --progress=bar:force 2>&1
             echo -e "\nDone! Thank you for using my script.\n"
