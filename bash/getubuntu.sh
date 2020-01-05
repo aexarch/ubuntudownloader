@@ -1,7 +1,7 @@
 #!/bin/bash
 echo -e "Ubuntu ISO Downloader for Desktop x64 architectures\n"
 
-#The following code segment checks for internet connectivity, then enters an if statement.
+# The following code segment checks for internet connectivity, then enters an if statement.
 echo -e "This bash script requires an active internet connection and may also require superuser permissions.\nPlease ensure that you have both before proceeding."
 cat < /dev/null > /dev/tcp/8.8.8.8/53; ONLINE=$( echo $? )
 if [ $ONLINE -eq 0 ]; then
