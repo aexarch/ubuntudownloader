@@ -18,7 +18,11 @@ if [[ -z $(which wget) ]]; then
     if [[ ! -z $(which apt-get) ]]; then
         echo -e "\nAttempting to update package list and install via APT. Please provide superuser permissions.\n"
         sudo apt-get update
-        sudo apt-get install wget || echo -e "\nThere was an error while installing the missing wget package.\nPlease install wget manually and rerun this script." && exit
+        sudo apt-get install wget
+        if [[ $? -ne 0 ]]; then
+            echo -e "\nThere was an error while installing the missing wget package.\nPlease install wget manually and rerun this script."
+            exit
+        fi
         echo -e "\nDone. Proceeding...\n"
     else
         echo -e "\nUnable to retrieve missing package wget.\nYou'll have to manually install it and rerun this script."
