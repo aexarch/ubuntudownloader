@@ -8,7 +8,7 @@ if [ $ONLINE -eq 0 ]; then
     echo -e "\nThe network connection is up. Proceeding...\n"
 else
   echo -e "\nThe network connection is down.\nPlease connect to the internet and try again."
-  exit
+  exit 1
 fi
 
 # The following code segment checks if the wget dependency is installed, and if apt-get command exists, downloads the missing command.
