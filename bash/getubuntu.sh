@@ -11,7 +11,7 @@ else
   exit 1
 fi
 
-# The following code segment checks if the wget dependency is installed, and if apt-get command exists, downloads the missing command.
+# The following code segment checks if the wget dependency is installed, and, if apt-get is present, installs the missing package.
 echo -e "\nIn order for this bash script to work the wget package needs to be installed, if not present.\nIn such case, the script will try to install it."
 if [[ -z $(which wget) ]]; then
     echo -e "\nwget package is not installed."
@@ -38,12 +38,12 @@ cleanup () {
     rm vnrs.txt
 }
 
-# The following code segment uses wget in spider mode, pipes its output to grep to be filtered for ftp urls using regex, then sort to only keep unique occurrences of urls, saves output in urls.txt, then reads the lines into an array
+# The following code segment uses wget in spider mode, pipes its output to grep to be filtered for ftp urls using regex, then pipes to sort to only keep unique occurrences of pattern matches, saves output in urls.txt, reads the lines of text into an array
 echo -e "\nFetching download URLs for available Ubuntu versions and building menu. Please wait..."
 wget -r --spider -l0 -A iso ftp://releases.ubuntu.com/releases/.pool/ 2>&1 | grep -Eo '(ftp)://[^/"].+\-desktop\-amd64\.iso' | sort -u > urls.txt
 readarray urlarr < urls.txt
 
-# The following code segment pipes the cat output of urls.txt to awk to manipulate and only print the version numbers into a text file called vnrs.txt, then read into an array
+# The following code processes urls.txt with awk to only print the version numbers into a text file called vnrs.txt, then reads the file into an array
 awk -F"-" '{ print $2 }' urls.txt > vnrs.txt
 readarray vnrarr < vnrs.txt
 
