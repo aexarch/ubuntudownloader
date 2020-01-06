@@ -3,7 +3,7 @@ echo -e "Ubuntu ISO Downloader for Desktop x64 architectures\n"
 
 # The following code segment checks for internet connectivity, then enters an if statement.
 echo -e "This bash script requires an active internet connection and may also require superuser permissions.\nPlease ensure that you have both before proceeding."
-cat < /dev/null > /dev/tcp/8.8.8.8/53; ONLINE=$( echo $? )
+cat < /dev/null > /dev/tcp/8.8.8.8/53; ONLINE=$? 
 if [ $ONLINE -eq 0 ]; then
     echo -e "\nThe network connection is up. Proceeding...\n"
 else
@@ -18,13 +18,8 @@ if [[ -z $(which wget) ]]; then
     if [[ ! -z $(which apt-get) ]]; then
         echo -e "\nAttempting to update package list and install via APT. Please provide superuser permissions.\n"
         sudo apt-get update
-        sudo apt-get install wget
-        if [ $? -eq 0 ]; then
-            echo -e "\nDone. Proceeding...\n"
-        else
-            echo -e "\nThere was an error while installing the missing wget package. apt-get exit code is: $?\nPlease install wget manually and rerun this script."
-            exit
-        fi
+        sudo apt-get install wget || echo -e "\nThere was an error while installing the missing wget package.\nPlease install wget manually and rerun this script." && exit
+        echo -e "\nDone. Proceeding...\n"
     else
         echo -e "\nUnable to retrieve missing package wget.\nYou'll have to manually install it and rerun this script."
         exit
@@ -44,7 +39,7 @@ wget -r --spider -l0 -A iso ftp://releases.ubuntu.com/releases/.pool/ 2>&1 | gre
 readarray urlarr < urls.txt
 
 # The following code segment pipes the cat output of urls.txt to awk to manipulate and only print the version numbers into a text file called vnrs.txt, then read into an array
-cat urls.txt | awk -F"-" '{ print $2 }' > vnrs.txt
+awk -F"-" '{ print $2 }' urls.txt > vnrs.txt
 readarray vnrarr < vnrs.txt
 
 # The following code segment checks if the array is empty. If it is, it exits.
