@@ -22,12 +22,12 @@ if [[ -z $(which wget) ]]; then
         INSTALLSTATUS=$?
         if [ $INSTALLSTATUS -ne 0 ]; then
             echo -e "\nThere was an error while installing the missing wget package.\nPlease install wget manually and rerun this script."
-            exit
+            exit 127
         fi
         echo -e "\nDone. Proceeding...\n"
     else
         echo -e "\nUnable to retrieve missing package wget.\nYou'll have to manually install it and rerun this script."
-        exit
+        exit 127
     fi
 fi
 
@@ -52,7 +52,7 @@ if [ ${#vnrarr[@]} -eq 0 ]; then
     echo -e "\nThe filelist returned seems to be empty.\nPlease check connectivity and retry later.\nIf this issue persists, please contact the developer of this script.\n"
     echo -e "Tidying up and exiting script."
     cleanup
-    exit
+    exit 1
 fi
 
 # The following code segment generates a selection menu using version numbers as entries, matching the choice to the array of urls
@@ -73,7 +73,7 @@ while [[ $VERSION = "" ]]; do
             if [[ ! $REPLY =~ ^[Yy]$ ]]; then
                 echo -e "\nUser aborted. Tidying up and exiting script."
                 cleanup
-                exit
+                exit 0
             fi
 
 # The following code segment utilizes wget to download the file, in quiet mode, resumable and with infinite tries
