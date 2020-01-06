@@ -12,7 +12,7 @@ else
 fi
 
 # The following code segment checks if the wget dependency is installed, and if apt-get command exists, downloads the missing command.
-echo -e "\nIn order for this bash script to work the wget package needs to be installed, if not present.\nIf not found the script will try to install it."
+echo -e "\nIn order for this bash script to work the wget package needs to be installed, if not present.\nIn such case, the script will try to install it."
 if [[ -z $(which wget) ]]; then
     echo -e "\nwget package is not installed."
     if [[ ! -z $(which apt-get) ]]; then
