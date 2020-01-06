@@ -19,7 +19,8 @@ if [[ -z $(which wget) ]]; then
         echo -e "\nAttempting to update package list and install via APT. Please provide superuser permissions.\n"
         sudo apt-get update
         sudo apt-get install wget
-        if [[ $? -ne 0 ]]; then
+        INSTALLSTATUS=$?
+        if [ $INSTALLSTATUS -ne 0 ]; then
             echo -e "\nThere was an error while installing the missing wget package.\nPlease install wget manually and rerun this script."
             exit
         fi
