@@ -25,6 +25,15 @@ if [[ -z $(which wget) ]]; then
             exit 127
         fi
         echo -e "\nDone. Proceeding...\n"
+    elif [[ ! -z $(which pacman) ]]; then
+        echo -e "\nAttempting to update package list and install via pacman. Please provide superuser permissions.\n"
+        sudo pacman -S wget
+        INSTALLSTATUS=$?
+        if [ $INSTALLSTATUS -ne 0 ]; then
+            echo -e "\nThere was an error while installing the missing wget package.\nPlease install wget manually and rerun this script."
+            exit 127
+        fi
+        echo -e "\nDone. Proceeding...\n"
     else
         echo -e "\nUnable to retrieve missing package wget.\nYou'll have to manually install it and rerun this script."
         exit 127
@@ -40,7 +49,7 @@ cleanup () {
 
 # The following code segment uses wget in spider mode, pipes its output to grep to be filtered for ftp urls using regex, then pipes to sort to only keep unique occurrences of pattern matches, saves output in urls.txt, reads the lines of text into an array
 echo -e "\nFetching download URLs for available Ubuntu versions and building menu. Please wait..."
-wget -r --spider -l0 -A iso ftp://releases.ubuntu.com/releases/.pool/ 2>&1 | grep -Eo '(ftp)://[^/"].+\-desktop\-amd64\.iso' | sort -u > urls.txt
+wget -r --spider -l0 -A iso ftp://releases.ubuntu.com/releases/.pool/ 2>&1 | grep -Eo 'ftp://[^/"].+\-desktop\-amd64\.iso' | sort -u > urls.txt
 readarray urlarr < urls.txt
 
 # The following code processes urls.txt with awk to only print the version numbers into a text file called vnrs.txt, then reads the file into an array
