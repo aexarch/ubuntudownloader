@@ -11,7 +11,7 @@ else
   exit 1
 fi
 
-# The following code segment checks if the wget dependency is installed, and, if apt-get is present, installs the missing package.
+# The following code segment checks if the wget dependency is installed, and, if apt-get or pacman is present, installs the missing package.
 echo -e "\nIn order for this bash script to work the wget package needs to be installed, if not present.\nIn such case, the script will try to install it."
 if [[ -z $(which wget) ]]; then
     echo -e "\nwget package is not installed."
@@ -26,7 +26,7 @@ if [[ -z $(which wget) ]]; then
         fi
         echo -e "\nDone. Proceeding...\n"
     elif [[ ! -z $(which pacman) ]]; then
-        echo -e "\nAttempting to update package list and install via pacman. Please provide superuser permissions.\n"
+        echo -e "\nAttempting to install via pacman. Please provide superuser permissions.\n"
         sudo pacman -S wget
         INSTALLSTATUS=$?
         if [ $INSTALLSTATUS -ne 0 ]; then
