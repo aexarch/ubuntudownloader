@@ -52,15 +52,18 @@ echo -e "\nFetching download URLs for available Ubuntu versions and building men
 wget -r --spider -l0 -A iso ftp://releases.ubuntu.com/releases/.pool/ 2>&1 | grep -Eo 'ftp://[^/"].+\-desktop\-amd64\.iso' | sort -u > urls.txt
 readarray urlarr < urls.txt
 
+
+
 # The following code processes urls.txt with awk to only print the version numbers into a text file called vnrs.txt, then reads the file into an array
 awk -F"-" '{ print $2 }' urls.txt > vnrs.txt
 readarray vnrarr < vnrs.txt
 
+cleanup
+
 # The following code segment checks if the array is empty. If it is, it exits.
 if [ ${#vnrarr[@]} -eq 0 ]; then
     echo -e "\nThe filelist returned seems to be empty.\nPlease check connectivity and retry later.\nIf this issue persists, please contact the developer of this script.\n"
-    echo -e "Tidying up and exiting script."
-    cleanup
+    echo -e "Exiting script."
     exit 1
 fi
 
@@ -80,8 +83,7 @@ while [[ $VERSION = "" ]]; do
             read -p "Download the file? Type Y to download or anything else to exit. " -n 1 -r
             echo -e "\n"
             if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-                echo -e "\nUser aborted. Tidying up and exiting script."
-                cleanup
+                echo -e "\nUser aborted. Exiting script."
                 exit 0
             fi
 
@@ -93,6 +95,5 @@ while [[ $VERSION = "" ]]; do
         break
     done
 done
-echo "Tidying up and exiting script."
-cleanup
+echo "Exiting script."
 exit 0
